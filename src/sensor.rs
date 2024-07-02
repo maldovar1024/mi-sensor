@@ -21,7 +21,7 @@ const SENSOR_NAME: &str = "LYWSD02";
 const DATA_COUNT_CHAR_UUID: Uuid = Uuid::from_u128(0xebe0ccb9_7a0a_4b0c_8a1a_6ff2997da3a6);
 const DATA_CHAR_UUID: Uuid = Uuid::from_u128(0xebe0ccbc_7a0a_4b0c_8a1a_6ff2997da3a6);
 
-const BYTES_PER_DATUM: usize = 10;
+pub const BYTES_PER_DATUM: usize = 10;
 
 pub async fn update_data(filename: impl AsRef<Path>) -> Result<()> {
     let backup = filename.as_ref().with_extension("bk");
