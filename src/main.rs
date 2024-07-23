@@ -7,10 +7,14 @@ use std::{
 
 use anyhow::Result;
 use data::{get_summary, html::gen_html_string};
-// use sensor::update_data;
+use sensor::update_data;
 
-// #[tokio::main]
-fn main() -> Result<()> {
+#[tokio::main]
+async fn main() -> Result<()> {
+    // 连接设备，更新数据
+    update_data("../temp1.mi").await?;
+
+    // 读取数据，生成 HTML
     let data = fs::read("../temp1.mi")?;
     let summaries = get_summary(&data);
 
