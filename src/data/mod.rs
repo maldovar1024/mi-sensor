@@ -88,34 +88,32 @@ macro_rules! summary {
                 if let Some(start) = self.iter.next() {
                     let start_time = start.get_item_data().time;
                     let cur_date = start_time.$time_fn();
-
-                    let mut max_temp_sum = 0;
-                    let mut min_temp_sum = 0;
-                    let mut max_humidity_sum = 0;
-                    let mut min_humidity_sum = 0;
-
-                    let mut count = 0usize;
+                    
+                    let start_item_data = start.get_item_data();
+                    let mut max_temperature = start_item_data.max_temperature;
+                    let mut min_temperature = start_item_data.min_temperature;
+                    let mut max_humidity = start_item_data.max_humidity;
+                    let mut min_humidity = start_item_data.min_humidity;
 
                     let mut data = vec![start];
 
                     while self.iter.peek().is_some_and(|item| item.get_item_data().time.$time_fn() == cur_date) {
                         let item = self.iter.next().unwrap();
                         let item_data = item.get_item_data();
-                        max_temp_sum += item_data.max_temperature as i32;
-                        min_temp_sum += item_data.min_temperature as i32;
-                        max_humidity_sum += item_data.max_humidity as u16;
-                        min_humidity_sum += item_data.min_humidity as u16;
-                        count += 1;
+                        max_temperature = max_temperature.max(item_data.max_temperature);
+                        min_temperature = min_temperature.min(item_data.min_temperature);
+                        max_humidity = max_humidity.max(item_data.max_humidity);
+                        min_humidity = min_humidity.min(item_data.min_humidity);
                         data.push(item);
                     }
 
                     return Some(Self::Item {
                         summary: DataItem {
                             time: start_time,
-                            max_temperature: (max_temp_sum / count as i32) as i16,
-                            min_temperature: (min_temp_sum / count as i32) as i16,
-                            max_humidity: (max_humidity_sum / count as u16) as u8,
-                            min_humidity: (min_humidity_sum / count as u16) as u8,
+                            max_temperature,
+                            min_temperature,
+                            max_humidity,
+                            min_humidity,
                         },
                         details: data.into_boxed_slice(),
                     });

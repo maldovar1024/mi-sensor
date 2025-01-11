@@ -12,7 +12,7 @@ impl WriteHtmlString for DataItem {
         write!(
             w,
             "<div>{},{}℃,{}℃,{}%,{}%</div>",
-            self.time,
+            self.time.format("%F %R"),
             get_temp(self.max_temperature),
             get_temp(self.min_temperature),
             self.max_humidity,
